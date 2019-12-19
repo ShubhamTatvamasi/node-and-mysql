@@ -1,0 +1,38 @@
+version: '3'
+services:
+  node:
+    container_name: node
+    image: node:lts
+    volumes:
+      - ./app:/usr/app
+    networks:
+      - overlay
+    ports:
+      - "8080:8080"
+    command: sleep infinity
+    working_dir: /usr/app
+    depends_on:
+      - mysql
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: join_us
+
+  mysql:
+    container_name: mysql
+    image: mysql:5.7
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - overlay
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: join_us
+
+volumes:
+  db-data:
+
+networks:
+  overlay:
